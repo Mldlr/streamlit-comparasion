@@ -298,7 +298,7 @@ if uploaded_file is not None:
     if method == "MobilenetV3-Large":
         IMAGE_SIZE = 384
         model = load_model(model_name="mbv3")
-    elif method == "MobilenetV3-Large with border detection":
+    elif method == "MobilenetV3-Large с определением черной границы документа":
         IMAGE_SIZE = 640
         model = load_model(model_name="mbv3", border=True)
     elif method == "Resnet-50":
