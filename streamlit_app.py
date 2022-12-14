@@ -23,9 +23,19 @@ def load_model(num_classes=2, model_name="mbv3", border=False, device=torch.devi
         else:
             checkpoint_path = os.path.join(os.getcwd(), "model_mbv3_iou_mix_2C049.pth")
     else:
-        model = deeplabv3_resnet50(num_classes=num_classes, aux_loss=True)
-        checkpoint_path = os.path.join(os.getcwd(), "model_r50_iou_mix_2C020.pth")
+        if border:
+            model = torch.load('./best_model.pth')
+            model.to(device)
+            model.eval()
+            if border:
+                _ = model(torch.randn((1, 3, 640, 640)))
+            else:
+                _ = model(torch.randn((1, 3, 384, 384)))
 
+            return model
+        else:
+            model = deeplabv3_resnet50(num_classes=num_classes, aux_loss=True)
+            checkpoint_path = os.path.join(os.getcwd(), "model_r50_iou_mix_2C020.pth")
     model.to(device)
     checkpoints = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoints, strict=False)
@@ -283,7 +293,7 @@ st.title("Сравнение методов")
 uploaded_file = st.file_uploader("Загрузка документа:", type=["png", "jpg", "jpeg"])
 
 method = st.radio("Процесс выделения документа:", (
-"MobilenetV3-Large", "MobilenetV3-Large с определением черной границы документа", "Resnet-50", "OpenCV",),
+"MobilenetV3-Large", "MobilenetV3-Large с определением черной границы документа", "Resnet-50", "OpenCV", "Resnet-50 self trained"),
                   horizontal=True)
 
 col1, col2 = st.columns((6, 5))
@@ -304,6 +314,9 @@ if uploaded_file is not None:
     elif method == "Resnet-50":
         IMAGE_SIZE = 384
         model = load_model(model_name="r50")
+    elif method == "Resnet-50 self trained":
+        IMAGE_SIZE = 640
+        model = load_model(model_name="r50", border=True)
 
     with col1:
         st.title("Input")
