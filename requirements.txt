@@ -107,6 +107,7 @@ rich==12.6.0
 scikit-image==0.19.3
 scikit-learn==1.2.0
 scipy==1.9.3
+segmentation-models-pytorch==0.2.1
 semver==2.13.0
 Send2Trash==1.8.0
 setuptools==65.5.0

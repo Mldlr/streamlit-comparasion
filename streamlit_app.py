@@ -8,6 +8,7 @@ import numpy as np
 from PIL import Image
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
+import segmentation_models_pytorch as spm
 
 import torch
 import torchvision.transforms as torchvision_T
